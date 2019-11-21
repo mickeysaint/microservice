@@ -1,0 +1,13 @@
+用户名密码验证方式
+http://localhost:9999/oauth/token?grant_type=password&username=user&password=123456
+弹出的基本验证中输入password_client和123456，即可得到token
+{"access_token":"9c229f95-2407-4f22-bedc-a6e078fe637c","token_type":"bearer","expires_in":43199,"scope":"all"}
+
+oauth2授权方式
+http://127.0.0.1:9999/oauth/authorize?client_id=code_client&password=123456&response_type=code&redirect_uri=http://www.baidu.com
+得到code
+https://www.baidu.com/?code=GXvb2H
+
+拿到code获取token
+http://127.0.0.1:9999/oauth/token?grant_type=authorization_code&code=GXvb2H&client_id=code_client&client_secret=123456&redirect_uri=http://www.baidu.com
+{"access_token":"9b60ac8c-6c7e-4e99-b2c8-858f43db934a","token_type":"bearer","refresh_token":"a15a0d87-1fd4-4740-aeac-36ee70f8bf18","expires_in":42591,"scope":"all"}

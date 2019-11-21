@@ -1,0 +1,2 @@
+可以通过如下方式访问，如：其中service-auth为该模块的application name
+http://localhost:8040/service-auth/user/getUserByToken?access_token=111

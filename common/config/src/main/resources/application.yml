@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: service-config
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: D:/08 idea_ws2/microservice/allconfig/
+  profiles:
+    active: native
+server:
+  port: 8888
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

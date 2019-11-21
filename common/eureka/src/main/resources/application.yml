@@ -1,0 +1,19 @@
+spring:
+  freemarker:
+    template-loader-path: classpath:/templates/
+    prefer-file-system-access: false
+
+server:
+  port: 8761
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+  server:
+    enable-self-preservation: false #自我保护机制
+    eviction-interval-timer-in-ms: 30000  #及时踢出已关停的节点
