@@ -5,18 +5,18 @@ import com.netflix.zuul.context.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.PRE_TYPE;
+import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 
 public class PreRequestLogFilter extends ZuulFilter {
 
     @Override
     public String filterType() {
-        return PRE_TYPE;
+        return FilterConstants.PRE_TYPE;
     }
 
     @Override
     public int filterOrder() {
-        return 0;
+        return 999;
     }
 
     public boolean shouldFilter() {

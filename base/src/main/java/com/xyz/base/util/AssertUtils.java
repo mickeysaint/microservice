@@ -1,5 +1,7 @@
 package com.xyz.base.util;
 
+import com.xyz.base.exception.BusinessException;
+
 import java.util.List;
 
 public class AssertUtils {

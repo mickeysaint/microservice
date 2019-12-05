@@ -1,8 +1,16 @@
 spring:
   application:
     name: gateway-zuul
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
 server:
   port: 8040
+
 eureka:
   client:
     serviceUrl:
