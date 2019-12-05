@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/sysconfig")
-public class SysConfigController {
+public class SysconfigController {
 
     @Autowired
     private SysConfigService sysConfigService;
