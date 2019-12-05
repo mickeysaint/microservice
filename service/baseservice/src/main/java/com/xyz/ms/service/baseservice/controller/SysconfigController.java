@@ -1,11 +1,11 @@
 package com.xyz.ms.service.baseservice.controller;
 
-import com.xyz.base.dbutil.ResultBean;
+import com.xyz.base.common.ResultBean;
+import com.xyz.base.exception.BusinessException;
+import com.xyz.base.po.base.SysConfigPo;
 import com.xyz.base.util.AssertUtils;
-import com.xyz.base.util.BusinessException;
-import com.xyz.ms.service.baseservice.bean.TbaseSysconfig;
-import com.xyz.ms.service.baseservice.service.TbaseSysconfigService;
-import org.apache.commons.lang3.StringUtils;
+import com.xyz.ms.service.baseservice.service.SysConfigService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +15,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/sysconfig")
-public class SysconfigController {
+public class SysConfigController {
 
     @Autowired
-    private TbaseSysconfigService tbaseSysconfigService;
+    private SysConfigService sysConfigService;
 
     @RequestMapping("/add")
-    public ResultBean<Void> add(TbaseSysconfig sysconfig) {
+    public ResultBean<Void> add(SysConfigPo sysconfig) {
         ResultBean<Void> ret = new ResultBean<>();
 
         try {
@@ -29,14 +29,14 @@ public class SysconfigController {
             AssertUtils.isTrue(StringUtils.isNotEmpty(sysconfig.getConfigKey()), "配置项编码不能为空。");
             AssertUtils.isTrue(StringUtils.isNotEmpty(sysconfig.getConfigName()), "配置项名称不能为空。");
 
-            AssertUtils.isTrue(tbaseSysconfigService.exists(sysconfig.getConfigKey()), "该字典类型已经存在。");
+            AssertUtils.isTrue(sysConfigService.exists(sysconfig.getConfigKey()), "该字典类型已经存在。");
 
-            tbaseSysconfigService.save(sysconfig);
+            sysConfigService.save(sysconfig);
         } catch(BusinessException e) {
-            ret.setResult(false);
+            ret.setSuccess(false);
             ret.setMessage(e.getMessage());
         } catch(Exception e) {
-            ret.setResult(false);
+            ret.setSuccess(false);
             ret.setMessage("操作失败");
         }
 
@@ -44,42 +44,42 @@ public class SysconfigController {
     }
 
     @RequestMapping("/getById")
-    public ResultBean<TbaseSysconfig> getById(Long id) {
-        ResultBean<TbaseSysconfig> ret = new ResultBean<>();
-        TbaseSysconfig sysconfig = tbaseSysconfigService.findById(id);
+    public ResultBean<SysConfigPo> getById(Long id) {
+        ResultBean<SysConfigPo> ret = new ResultBean<>();
+        SysConfigPo sysconfig = sysConfigService.findById(id);
         ret.setData(sysconfig);
         return ret;
     }
 
     @RequestMapping("/getByCode")
-    public ResultBean<TbaseSysconfig> getByCode(String configKey) {
-        ResultBean<TbaseSysconfig> ret = new ResultBean<>();
-        TbaseSysconfig eg = new TbaseSysconfig();
+    public ResultBean<SysConfigPo> getByCode(String configKey) {
+        ResultBean<SysConfigPo> ret = new ResultBean<>();
+        SysConfigPo eg = new SysConfigPo();
         eg.setConfigKey(configKey);
-        List<TbaseSysconfig> sysconfigList = tbaseSysconfigService.findByEg(eg);
+        List<SysConfigPo> sysconfigList = sysConfigService.findByEg(eg);
         ret.setData(CollectionUtils.isEmpty(sysconfigList)?null:sysconfigList.get(0));
         return ret;
     }
 
     @RequestMapping("/update")
-    public ResultBean<Void> update(TbaseSysconfig sysconfig) {
+    public ResultBean<Void> update(SysConfigPo sysConfigPo) {
         ResultBean<Void> ret = new ResultBean<>();
         try {
-            AssertUtils.isTrue(sysconfig != null, "没有接收到待保存的数据。");
-            AssertUtils.isTrue(StringUtils.isNotEmpty(sysconfig.getConfigKey()), "配置项编码不能为空。");
-            AssertUtils.isTrue(StringUtils.isNotEmpty(sysconfig.getConfigName()), "配置项名称不能为空。");
+            AssertUtils.isTrue(sysConfigPo != null, "没有接收到待保存的数据。");
+            AssertUtils.isTrue(StringUtils.isNotEmpty(sysConfigPo.getConfigKey()), "配置项编码不能为空。");
+            AssertUtils.isTrue(StringUtils.isNotEmpty(sysConfigPo.getConfigName()), "配置项名称不能为空。");
 
-            TbaseSysconfig another = tbaseSysconfigService.findByConfigKey(sysconfig.getConfigKey());
-            if (another != null && !another.getId().equals(sysconfig.getId())) {
+            SysConfigPo another = sysConfigService.findByConfigKey(sysConfigPo.getConfigKey());
+            if (another != null && !another.getId().equals(sysConfigPo.getId())) {
                 throw new BusinessException("配置项编码重复。");
             }
 
-            tbaseSysconfigService.update(sysconfig);
+            sysConfigService.update(sysConfigPo);
         } catch(BusinessException e) {
-            ret.setResult(false);
+            ret.setSuccess(false);
             ret.setMessage(e.getMessage());
         } catch(Exception e) {
-            ret.setResult(false);
+            ret.setSuccess(false);
             ret.setMessage("操作失败");
         }
 
@@ -88,8 +88,8 @@ public class SysconfigController {
 
     @RequestMapping("/delete")
     public ResultBean<Void> delete(Long id) {
-        TbaseSysconfig sysconfig = tbaseSysconfigService.findById(id);
-        tbaseSysconfigService.delete(sysconfig);
+        SysConfigPo sysconfig = sysConfigService.findById(id);
+        sysConfigService.delete(sysconfig);
         ResultBean<Void> ret = new ResultBean<Void>();
         return ret;
     }
