@@ -9,7 +9,7 @@ public interface TreeNode<T> {
 
     Long getParentId();
 
-    void setParentId(Long id);
+    void setParentId(Long parentId);
 
     List<T> getChildren();
 
