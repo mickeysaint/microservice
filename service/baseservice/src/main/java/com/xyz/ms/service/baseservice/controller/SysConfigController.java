@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/sysconfig")
-public class SysConfigController {
+public class SysconfigController {
 
     @Autowired
     private SysConfigService sysConfigService;
@@ -28,7 +28,6 @@ public class SysConfigController {
             AssertUtils.isTrue(sysconfig != null, "没有接收到待保存的数据。");
             AssertUtils.isTrue(StringUtils.isNotEmpty(sysconfig.getConfigKey()), "配置项编码不能为空。");
             AssertUtils.isTrue(StringUtils.isNotEmpty(sysconfig.getConfigName()), "配置项名称不能为空。");
-
             AssertUtils.isTrue(sysConfigService.exists(sysconfig.getConfigKey()), "该字典类型已经存在。");
 
             sysConfigService.save(sysconfig);
