@@ -23,6 +23,8 @@ public class UserPo extends BasePo {
 
     private String accessToken;
 
+    private List<OrgPo> orgList = null;
+
     private List<RolePo> roleList = null;
 
     private List<MenuPo> menuList = null;
@@ -67,6 +69,14 @@ public class UserPo extends BasePo {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public List<OrgPo> getOrgList() {
+        return orgList;
+    }
+
+    public void setOrgList(List<OrgPo> orgList) {
+        this.orgList = orgList;
     }
 
     public List<RolePo> getRoleList() {

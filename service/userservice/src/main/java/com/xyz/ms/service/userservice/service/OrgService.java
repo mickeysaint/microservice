@@ -34,14 +34,15 @@ public class OrgService extends BaseService<OrgPo> {
 
         OrgPo parentOrgPo = findById(orgPo.getParentId());
         String parentOrgCode = parentOrgPo.getOrgCode();
+        parentOrgCode = StringUtils.isEmpty(parentOrgCode)?"":parentOrgCode;
         OrgPo eg = new OrgPo();
         eg.setParentId(orgPo.getParentId());
-        List<OrgPo> chilren = findByEg(eg, " order by ORG_CODE ");
+        List<OrgPo> children = findByEg(eg, " order by ORG_CODE ");
         int currIndex = 1;
-        if (chilren != null && chilren.size() > 0) {
-            for (OrgPo c : chilren) {
+        if (children != null && children.size() > 0) {
+            for (OrgPo c : children) {
                 String cOrgCode = c.getOrgCode();
-                String index = cOrgCode.replace(parentOrgCode, "");
+                String index = cOrgCode.substring(parentOrgCode.length());
                 if (currIndex != Integer.valueOf(index)) {
                     break;
                 }

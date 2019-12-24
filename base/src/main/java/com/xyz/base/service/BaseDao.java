@@ -1,5 +1,6 @@
 package com.xyz.base.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.xyz.base.common.Page;
 import com.xyz.base.po.BasePo;
 import org.apache.commons.lang.StringUtils;
@@ -28,7 +29,7 @@ import java.util.Map;
 public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
 
     @Autowired
-    private JdbcTemplate jt;
+    protected JdbcTemplate jt;
 
     @Resource(name="sqlSessionTemplate")
     public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
@@ -138,6 +139,9 @@ public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
         String tableName = getTableName();
         Map<String, String> javaDbFieldMapping = getJavaDbFieldMapping(clas);
         List<String> dbFieldNames = new ArrayList<>();
+        javaDbFieldMapping.forEach((k, v) -> {
+            dbFieldNames.add(v);
+        });
         String dbIdFieldName = getDbIdFieldName();
         String format = "select %s from %s where "+dbIdFieldName+"=?";
         return String.format(format, StringUtils.join(dbFieldNames, ", "), tableName);
@@ -217,6 +221,12 @@ public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
         return String.format(format, tableName);
     }
 
+    private String buildSql_deleteByIds(List<Long> ids) {
+        String tableName = getTableName();
+        String format = "delete from %s where id in (%s) ";
+        return String.format(format, tableName, StringUtils.join(ids, ","));
+    }
+
     private String getDbIdFieldName() {
         Class<T> clas = getPoClass();
         Map<String, String> mapping = getJavaDbFieldMapping(clas);
@@ -263,4 +273,9 @@ public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
         }
     }
 
+    public void deleteByIds(List<Long> ids) {
+        Assert.notEmpty(ids, "参数不能为空。");
+        String sql = buildSql_deleteByIds(ids);
+        jt.update(sql);
+    }
 }

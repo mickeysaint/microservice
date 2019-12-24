@@ -4,6 +4,7 @@ import com.xyz.base.po.user.RolePo;
 import com.xyz.base.po.user.UserPo;
 import com.xyz.base.service.BaseDao;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,4 +20,21 @@ public class RoleDao extends BaseDao<RolePo> {
         return this.findBySql(sql, Arrays.asList(userPo.getId()));
     }
 
+    @Transactional
+    public void addRoleMenuRef(Long roleId, Long menuId) {
+        String sql = "insert into tu_role_menu(ROLE_ID, MENU_ID) values(?, ?)";
+        this.jt.update(sql, roleId, menuId);
+    }
+
+    @Transactional
+    public void deleteRoleMenuRef(Long roleId) {
+        String sql = "delete from tu_role_menu where ROLE_ID=? ";
+        this.jt.update(sql, roleId);
+    }
+
+    @Transactional
+    public void deleteRoleUserRef(Long roleId) {
+        String sql = "delete from tu_role_user where ROLE_ID=? ";
+        this.jt.update(sql, roleId);
+    }
 }

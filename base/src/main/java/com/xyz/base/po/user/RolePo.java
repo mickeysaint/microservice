@@ -4,6 +4,7 @@ import com.xyz.base.po.BasePo;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import java.util.List;
 
 @Table(name="tu_role")
 public class RolePo extends BasePo {
@@ -19,6 +20,8 @@ public class RolePo extends BasePo {
 
     @Column(name="ROLE_NAME")
     private String roleName;
+
+    private List<MenuPo> menuList;
 
     @Override
     public Long getId() {
@@ -52,5 +55,13 @@ public class RolePo extends BasePo {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public List<MenuPo> getMenuList() {
+        return menuList;
+    }
+
+    public void setMenuList(List<MenuPo> menuList) {
+        this.menuList = menuList;
     }
 }

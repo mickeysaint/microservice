@@ -37,6 +37,7 @@ public class MenuService extends BaseService<MenuPo> {
 
         MenuPo parentMenuPo = findById(menuPo.getParentId());
         String parentMenuCode = parentMenuPo.getMenuCode();
+        parentMenuCode = StringUtils.isEmpty(parentMenuCode)?"":parentMenuCode;
         MenuPo eg = new MenuPo();
         eg.setParentId(menuPo.getParentId());
         List<MenuPo> chilren = findByEg(eg, " order by MENU_CODE ");
@@ -44,7 +45,7 @@ public class MenuService extends BaseService<MenuPo> {
         if (chilren != null && chilren.size() > 0) {
             for (MenuPo c : chilren) {
                 String cMenuCode = c.getMenuCode();
-                String index = cMenuCode.replace(parentMenuCode, "");
+                String index = cMenuCode.substring(parentMenuCode.length());
                 if (currIndex != Integer.valueOf(index)) {
                     break;
                 }

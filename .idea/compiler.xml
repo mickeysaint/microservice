@@ -11,6 +11,7 @@
         <module name="baseservice" />
         <module name="config" />
         <module name="eureka" />
+        <module name="txmanager" />
         <module name="userservice" />
         <module name="zuul" />
       </profile>

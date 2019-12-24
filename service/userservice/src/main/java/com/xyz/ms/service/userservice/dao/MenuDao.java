@@ -42,11 +42,12 @@ public class MenuDao extends BaseDao<MenuPo> {
 
     public MenuPo findTreeById(Long id) {
         MenuPo menuPo = findById(id);
+        String parentMenuCode = StringUtils.isEmpty(menuPo.getMenuCode())?"":menuPo.getMenuCode();
         String sql = "SELECT A.ID, A.MENU_CODE, A.MENU_NAME, A.PARENT_ID FROM TU_MENU A " +
-                "WHERE A.ORG_CODE LIKE ? ORDER BY A.ORG_CODE ASC ";
-        List<MenuPo> list = this.findBySql(sql, Arrays.asList(id));
-        List<MenuPo> chilren = TreeUtils.convertList2Tree(list, id);
-        menuPo.setChildren(chilren);
+                "WHERE A.MENU_CODE LIKE ? ORDER BY A.MENU_CODE ASC ";
+        List<MenuPo> list = this.findBySql(sql, Arrays.asList(parentMenuCode + "%"));
+        List<MenuPo> children = TreeUtils.convertList2Tree(list, id);
+        menuPo.setChildren(children);
         return menuPo;
     }
 

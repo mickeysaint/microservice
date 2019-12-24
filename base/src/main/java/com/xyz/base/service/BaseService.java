@@ -1,5 +1,6 @@
 package com.xyz.base.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.xyz.base.po.BasePo;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,4 +39,8 @@ public abstract class BaseService<T extends BasePo> {
         return dao.findByEg(eg, orderBy);
     }
 
+    @Transactional
+    public void deleteByIds(List<Long> ids) {
+        dao.deleteByIds(ids);
+    }
 }

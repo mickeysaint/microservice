@@ -1,11 +1,13 @@
 package com.xyz.ms.service.userservice.service;
 
 import com.xyz.base.po.user.MenuPo;
+import com.xyz.base.po.user.OrgPo;
 import com.xyz.base.po.user.RolePo;
 import com.xyz.base.po.user.UserPo;
 import com.xyz.base.service.BaseDao;
 import com.xyz.base.service.BaseService;
 import com.xyz.ms.service.userservice.dao.MenuDao;
+import com.xyz.ms.service.userservice.dao.OrgDao;
 import com.xyz.ms.service.userservice.dao.RoleDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,6 +18,9 @@ import java.util.List;
 
 @Service
 public class UserService extends BaseService<UserPo> {
+
+    @Autowired
+    private OrgDao orgDao;
 
     @Autowired
     private RoleDao roleDao;
@@ -46,18 +51,23 @@ public class UserService extends BaseService<UserPo> {
 
             // 设置用户的角色
             List<RolePo> roleList = roleDao.getRoleListByUser(ret);
+            ret.setRoleList(roleList);
 
             // 设置用户的菜单
             List<MenuPo> menuList = menuDao.getMenuListByRole(roleList);
-            List<MenuPo> newMenuList = new ArrayList<>();
-            if (menuList != null && menuList.size() > 0) {
-                for (MenuPo menoPo : menuList) {
-                    if (menoPo.getChildren() != null && menoPo.getChildren().size() > 0) {
-                        newMenuList.add(menoPo);
-                    }
-                }
-            }
-            ret.setMenuList(newMenuList);
+//            List<MenuPo> newMenuList = new ArrayList<>();
+//            if (menuList != null && menuList.size() > 0) {
+//                for (MenuPo menoPo : menuList) {
+//                    if (menoPo.getChildren() != null && menoPo.getChildren().size() > 0) {
+//                        newMenuList.add(menoPo);
+//                    }
+//                }
+//            }
+            ret.setMenuList(menuList);
+
+            // 获取用户所属的组织
+            List<OrgPo> orgList = orgDao.getOrgListByUser(ret);
+            ret.setOrgList(orgList);
         }
 
         return ret;
