@@ -1,5 +1,6 @@
 package com.xyz.ms.common.zuul;
 
+import com.xyz.ms.common.zuul.filter.AuthFilter;
 import com.xyz.ms.common.zuul.filter.PreRequestLogFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,5 +19,10 @@ public class ZuulApplication {
     @Bean
     public PreRequestLogFilter preRequestLogFilter(){
         return new PreRequestLogFilter();
+    }
+
+    @Bean
+    public AuthFilter authFilter(){
+        return new AuthFilter();
     }
 }
