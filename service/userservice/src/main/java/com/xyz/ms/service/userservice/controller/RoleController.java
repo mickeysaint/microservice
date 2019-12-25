@@ -1,11 +1,14 @@
 package com.xyz.ms.service.userservice.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.xyz.base.common.Page;
 import com.xyz.base.common.ResultBean;
 import com.xyz.base.exception.BusinessException;
 import com.xyz.base.po.user.RolePo;
+import com.xyz.base.po.user.UserPo;
 import com.xyz.base.util.AssertUtils;
 import com.xyz.ms.service.userservice.service.RoleService;
+import com.xyz.ms.service.userservice.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,12 +18,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/role")
 public class RoleController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private UserService userService;
 
     Logger logger = LoggerFactory.getLogger(RoleController.class);
 
@@ -74,6 +83,15 @@ public class RoleController {
         ResultBean<RolePo> ret = new ResultBean<>();
         RolePo rolePo = roleService.findRoleById(id);
         ret.setData(rolePo);
+        return ret;
+    }
+
+    @RequestMapping("/getListData")
+    public ResultBean<Page<RolePo>> getListData(@RequestBody Map params, HttpServletRequest request) {
+        UserPo currentUser = userService.getCurrentUser(request);
+        ResultBean<Page<RolePo>> ret = new ResultBean<>();
+        Page<RolePo> roles = roleService.getListData(params, currentUser);
+        ret.setData(roles);
         return ret;
     }
 }

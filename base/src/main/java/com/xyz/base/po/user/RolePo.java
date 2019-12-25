@@ -23,6 +23,10 @@ public class RolePo extends BasePo {
 
     private List<MenuPo> menuList;
 
+    private String orgName;
+
+    private String orgFullName;
+
     @Override
     public Long getId() {
         return this.id;
@@ -63,5 +67,21 @@ public class RolePo extends BasePo {
 
     public void setMenuList(List<MenuPo> menuList) {
         this.menuList = menuList;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
+
+    public String getOrgFullName() {
+        return orgFullName;
+    }
+
+    public void setOrgFullName(String orgFullName) {
+        this.orgFullName = orgFullName;
     }
 }

@@ -1,23 +1,30 @@
 package com.xyz.ms.service.userservice.service;
 
+import com.xyz.base.common.ResultBean;
+import com.xyz.base.exception.BusinessException;
 import com.xyz.base.po.user.MenuPo;
 import com.xyz.base.po.user.OrgPo;
 import com.xyz.base.po.user.RolePo;
 import com.xyz.base.po.user.UserPo;
 import com.xyz.base.service.BaseDao;
 import com.xyz.base.service.BaseService;
+import com.xyz.ms.service.userservice.client.Oauth2ClientService;
 import com.xyz.ms.service.userservice.dao.MenuDao;
 import com.xyz.ms.service.userservice.dao.OrgDao;
 import com.xyz.ms.service.userservice.dao.RoleDao;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
 public class UserService extends BaseService<UserPo> {
+
+    @Autowired
+    private Oauth2ClientService oauth2ClientService;
 
     @Autowired
     private OrgDao orgDao;
@@ -73,4 +80,17 @@ public class UserService extends BaseService<UserPo> {
         return ret;
     }
 
+    public UserPo getCurrentUser(HttpServletRequest request) {
+        UserPo ret = null;
+        String accessToken = request.getHeader("accessToken");
+        if (!StringUtils.isEmpty(accessToken)) {
+            ResultBean<UserPo> resultBean = oauth2ClientService.getUserByToken(accessToken);
+            ret = resultBean.getData();
+        }
+
+        if (ret == null) {
+            throw new BusinessException("获取当前用户失败。");
+        }
+        return ret;
+    }
 }
