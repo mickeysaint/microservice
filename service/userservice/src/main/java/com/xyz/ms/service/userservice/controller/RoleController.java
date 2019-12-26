@@ -7,6 +7,7 @@ import com.xyz.base.exception.BusinessException;
 import com.xyz.base.po.user.RolePo;
 import com.xyz.base.po.user.UserPo;
 import com.xyz.base.util.AssertUtils;
+import com.xyz.base.vo.user.RoleVo;
 import com.xyz.ms.service.userservice.service.RoleService;
 import com.xyz.ms.service.userservice.service.UserService;
 import org.apache.commons.lang.StringUtils;
@@ -34,17 +35,17 @@ public class RoleController {
     Logger logger = LoggerFactory.getLogger(RoleController.class);
 
     @RequestMapping("/save")
-    public ResultBean<Void> save(RolePo rolePo) {
+    public ResultBean<Void> save(@RequestBody RoleVo roleVo) {
         ResultBean<Void> ret = new ResultBean<>();
         try {
-            AssertUtils.isTrue(rolePo != null, "没有接收到角色数据。");
-            AssertUtils.isTrue(StringUtils.isNotEmpty(rolePo.getRoleCode()), "角色代码不能为空。");
-            AssertUtils.isTrue(StringUtils.isNotEmpty(rolePo.getRoleName()), "角色名称不能为空。");
+            AssertUtils.isTrue(roleVo != null, "没有接收到角色数据。");
+            AssertUtils.isTrue(StringUtils.isNotEmpty(roleVo.getRoleCode()), "角色代码不能为空。");
+            AssertUtils.isTrue(StringUtils.isNotEmpty(roleVo.getRoleName()), "角色名称不能为空。");
 
-            if (rolePo.getId() != null) {
-                roleService.updateRole(rolePo);
+            if (roleVo.getId() != null) {
+                roleService.updateRole(roleVo);
             } else {
-                roleService.addRole(rolePo);
+                roleService.addRole(roleVo);
             }
         } catch(BusinessException e) {
             logger.error("保存角色出错", e);
@@ -87,10 +88,10 @@ public class RoleController {
     }
 
     @RequestMapping("/getListData")
-    public ResultBean<Page<RolePo>> getListData(@RequestBody Map params, HttpServletRequest request) {
+    public ResultBean<Page<RoleVo>> getListData(@RequestBody Map params, HttpServletRequest request) {
         UserPo currentUser = userService.getCurrentUser(request);
-        ResultBean<Page<RolePo>> ret = new ResultBean<>();
-        Page<RolePo> roles = roleService.getListData(params, currentUser);
+        ResultBean<Page<RoleVo>> ret = new ResultBean<>();
+        Page<RoleVo> roles = roleService.getListData(params, currentUser);
         ret.setData(roles);
         return ret;
     }
