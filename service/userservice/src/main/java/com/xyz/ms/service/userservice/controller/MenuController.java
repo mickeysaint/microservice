@@ -5,6 +5,7 @@ import com.xyz.base.common.ResultBean;
 import com.xyz.base.exception.BusinessException;
 import com.xyz.base.po.user.MenuPo;
 import com.xyz.base.util.AssertUtils;
+import com.xyz.base.util.TreeUtils;
 import com.xyz.ms.service.userservice.service.MenuService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -92,6 +93,7 @@ public class MenuController {
         if (menuPo != null) {
             menuList.add(menuPo);
         }
+        TreeUtils.clearEmptyChildren(menuList);
         ret.setData(menuList);
         return ret;
     }

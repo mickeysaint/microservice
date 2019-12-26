@@ -45,7 +45,7 @@ public class AuthFilter extends ZuulFilter {
         String accessToken = request.getHeader("accessToken");
         String requestUrl = request.getRequestURI();
 
-        if (requestUrl.contains(requestUrl)) {
+        if (noCheckUrls.contains(requestUrl)) {
             return null;
         } else {
             ResultBean<UserPo> resultBean = oauth2ClientService.getUserByToken(accessToken);

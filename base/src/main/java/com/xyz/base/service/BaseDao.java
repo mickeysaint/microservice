@@ -3,6 +3,7 @@ package com.xyz.base.service;
 import com.alibaba.fastjson.JSONArray;
 import com.xyz.base.common.Page;
 import com.xyz.base.po.BasePo;
+import com.xyz.base.vo.user.RoleVo;
 import org.apache.commons.lang.StringUtils;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
@@ -243,7 +244,7 @@ public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
         }
     }
 
-    private Map<String, String> getJavaDbFieldMapping(Class<T> clas) {
+    private Map<String, String> getJavaDbFieldMapping(Class clas) {
         Field[] fields = clas.getDeclaredFields();
 
         Map<String, String> javaDbFieldMapping = new HashMap<String, String>();
@@ -277,5 +278,55 @@ public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
         Assert.notEmpty(ids, "参数不能为空。");
         String sql = buildSql_deleteByIds(ids);
         jt.update(sql);
+    }
+
+    protected <E> Page<E> findPageBySql(String sql, List params, int pageIndex, int pageSize,
+                                             Class<E> clazz) {
+        String sqlCount = "select count(1) from (" + sql + ") t_main ";
+        int offset = (pageIndex-1)*pageSize;
+        String sqlList = "select * from (" + sql + ") t_main limit " + offset + ", " + pageSize;
+        Page<E> page = new Page<>();
+        page.setCount(jt.queryForObject(sqlCount, params.toArray(), Long.class));
+        page.setDataList(findBySql(sqlList, params, clazz));
+        return page;
+    }
+
+    public <E> List<E> findBySql(String sql, List<Object> params, Class<E> clazz) {
+        List<Map<String, Object>> mlist = jt.queryForList(sql, params.toArray());
+        List<E> rlist = new ArrayList<>();
+        if (CollectionUtils.isEmpty(mlist)) {
+            return rlist;
+        } else {
+            mlist.forEach(m->{rlist.add(map2Po(m, clazz));});
+            return rlist;
+        }
+    }
+
+    private <E> E map2Po(Map<String, Object> m, Class<E> clazz) {
+        if (m == null) {
+            return null;
+        }
+
+        E e = null;
+        try {
+            e = clazz.newInstance();
+        } catch (Exception e1) {
+            throw new RuntimeException(e1.getMessage());
+        }
+
+        BeanWrapper bw = new BeanWrapperImpl(e);
+        Map<String, String> javaDbFieldMapping = getJavaDbFieldMapping(clazz);
+        Map<String, String> dbJavaFieldMapping = new HashMap<String, String>();
+        javaDbFieldMapping.forEach((k, v) -> {
+            dbJavaFieldMapping.put(v, k);
+        });
+
+        m.forEach((k, v) -> {
+            String dbFieldName = k.toUpperCase();
+            String javaFieldName = dbJavaFieldMapping.get(dbFieldName);
+            bw.setPropertyValue(javaFieldName, v);
+        });
+
+        return e;
     }
 }
