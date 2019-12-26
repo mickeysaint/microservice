@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,9 +53,10 @@ public class OAuth2Controller {
         ResultBean<UserPo> resultBean = new ResultBean<>();
         OAuth2Authentication oAuth2Authentication = myTokenStore.readAuthentication(accessToken);
         if (oAuth2Authentication != null) {
-            UserDetailsImpl userDetailsImpl = (UserDetailsImpl)oAuth2Authentication.getPrincipal();
-            if (userDetailsImpl != null) {
-                resultBean.setData(userDetailsImpl.getUserPo());
+            UserDetails userDetails = (UserDetails)oAuth2Authentication.getPrincipal();
+            if (userDetails != null) {
+                ResultBean<UserPo> userRet = userClientService.findByUsername(userDetails.getUsername());
+                resultBean.setData(userRet.getData());
             } else {
                 resultBean.setSuccess(false);
                 resultBean.setMessage("根据token获取用户信息失败。");
