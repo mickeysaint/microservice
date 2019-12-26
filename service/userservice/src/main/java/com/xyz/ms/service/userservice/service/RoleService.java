@@ -9,6 +9,7 @@ import com.xyz.base.po.user.UserPo;
 import com.xyz.base.service.BaseDao;
 import com.xyz.base.service.BaseService;
 import com.xyz.base.util.StringUtil;
+import com.xyz.base.vo.user.RoleVo;
 import com.xyz.ms.service.userservice.dao.MenuDao;
 import com.xyz.ms.service.userservice.dao.OrgDao;
 import com.xyz.ms.service.userservice.dao.RoleDao;
@@ -90,7 +91,7 @@ public class RoleService extends BaseService<RolePo> {
         return rolePo;
     }
 
-    public Page<RolePo> getListData(Map params, UserPo currentUser) {
+    public Page<RoleVo> getListData(Map params, UserPo currentUser) {
         List<OrgPo> orgList = null;
         String roleCode = StringUtil.objToString(params.get("roleCode"));
         String roleName = StringUtil.objToString(params.get("roleName"));
