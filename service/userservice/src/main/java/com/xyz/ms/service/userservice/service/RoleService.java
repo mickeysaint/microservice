@@ -1,5 +1,6 @@
 package com.xyz.ms.service.userservice.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.xyz.base.common.Constants;
 import com.xyz.base.common.Page;
 import com.xyz.base.po.user.MenuPo;
@@ -43,30 +44,44 @@ public class RoleService extends BaseService<RolePo> {
     }
 
     @Transactional
-    public void addRole(RolePo rolePo) {
+    public void addRole(RoleVo roleVo) {
         // 添加角色数据
-        this.save(rolePo);
+        JSONArray jaOrgIdFull = roleVo.getOrgIdFull();
+        if (jaOrgIdFull != null && jaOrgIdFull.size() > 0) {
+            roleVo.setOrgId(Long.valueOf(jaOrgIdFull.get(jaOrgIdFull.size()-1).toString()));
+        } else {
+            roleVo.setOrgId(null);
+        }
+        this.save(roleVo);
 
         // 添加角色对应的菜单数据
-        List<MenuPo> menuList = rolePo.getMenuList();
+        roleVo.setMenuList(menuDao.getMenuListByIdFulls(roleVo.getMenuIdFulls()));
+        List<MenuPo> menuList = roleVo.getMenuList();
         if (menuList != null && menuList.size() > 0) {
             for (MenuPo menuPo : menuList) {
-                roleDao.addRoleMenuRef(rolePo.getId(), menuPo.getId());
+                roleDao.addRoleMenuRef(roleVo.getId(), menuPo.getId());
             }
         }
     }
 
     @Transactional
-    public void updateRole(RolePo rolePo) {
+    public void updateRole(RoleVo roleVo) {
         // 更新角色数据
-        this.update(rolePo);
+        JSONArray jaOrgIdFull = roleVo.getOrgIdFull();
+        if (jaOrgIdFull != null && jaOrgIdFull.size() > 0) {
+            roleVo.setOrgId(Long.valueOf(jaOrgIdFull.get(jaOrgIdFull.size()-1).toString()));
+        } else {
+            roleVo.setOrgId(null);
+        }
+        this.update(roleVo);
 
         // 更新角色对应的菜单数据
-        roleDao.deleteRoleMenuRef(rolePo.getId());
-        List<MenuPo> menuList = rolePo.getMenuList();
+        roleDao.deleteRoleMenuRef(roleVo.getId());
+        roleVo.setMenuList(menuDao.getMenuListByIdFulls(roleVo.getMenuIdFulls()));
+        List<MenuPo> menuList = roleVo.getMenuList();
         if (menuList != null && menuList.size() > 0) {
             for (MenuPo menuPo : menuList) {
-                roleDao.addRoleMenuRef(rolePo.getId(), menuPo.getId());
+                roleDao.addRoleMenuRef(roleVo.getId(), menuPo.getId());
             }
         }
     }

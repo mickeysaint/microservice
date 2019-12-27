@@ -57,4 +57,32 @@ public class MenuService extends BaseService<MenuPo> {
         }
         return parentMenuCode + StringUtils.leftPad(Integer.toString(currIndex), 2,'0');
     }
+
+    public String getMenuNameFull(Long id) {
+        MenuPo menuPo = this.findById(id);
+        if (menuPo == null) {
+            return "";
+        } else {
+            String parentMenuNameFull = getMenuNameFull(menuPo.getParentId());
+            if (StringUtils.isEmpty(parentMenuNameFull)) {
+                return menuPo.getMenuName();
+            } else {
+                return parentMenuNameFull + "/" + menuPo.getMenuName();
+            }
+        }
+    }
+
+    public String getIdFull(Long id) {
+        MenuPo menuPo = this.findById(id);
+        if (menuPo == null) {
+            return "";
+        } else {
+            String parentIdFull = getIdFull(menuPo.getParentId());
+            if (StringUtils.isEmpty(parentIdFull)) {
+                return menuPo.getId().toString();
+            } else {
+                return parentIdFull + "," + menuPo.getId();
+            }
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.xyz.ms.service.userservice.dao;
 
+import com.alibaba.fastjson.JSONArray;
 import com.xyz.base.po.user.MenuPo;
 import com.xyz.base.po.user.RolePo;
 import com.xyz.base.service.BaseDao;
@@ -51,4 +52,16 @@ public class MenuDao extends BaseDao<MenuPo> {
         return menuPo;
     }
 
+    public List<MenuPo> getMenuListByIdFulls(JSONArray idFulls) {
+        if (idFulls == null || idFulls.size() == 0) {
+            return null;
+        }
+
+        List<MenuPo> menuPoList = new ArrayList<MenuPo>();
+        for (int i=0; i<idFulls.size(); i++) {
+            JSONArray jaIdFull = idFulls.getJSONArray(i);
+            menuPoList.add(findById(Long.valueOf(jaIdFull.get(jaIdFull.size()-1).toString())));
+        }
+        return menuPoList;
+    }
 }

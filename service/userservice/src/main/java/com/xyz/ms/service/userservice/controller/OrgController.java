@@ -37,11 +37,16 @@ public class OrgController {
             if (orgPo.getId() != null) {
                 OrgPo editPo = orgService.findById(orgPo.getId());
                 editPo.setOrgName(orgPo.getOrgName());
+                editPo.setOrgNameFull(orgService.getOrgNameFull(orgPo.getId()));
+                editPo.setIdFull("["+orgService.getIdFull(orgPo.getId())+"]");
                 orgService.update(editPo);
             } else {
                 String orgCode = orgService.createOrgCode(orgPo);
                 orgPo.setOrgCode(orgCode);
                 orgService.save(orgPo);
+                orgPo.setOrgNameFull(orgService.getOrgNameFull(orgPo.getId()));
+                orgPo.setIdFull("["+orgService.getIdFull(orgPo.getId())+"]");
+                orgService.update(orgPo);
             }
         } catch(BusinessException e) {
             logger.error("保存组织结构出错", e);

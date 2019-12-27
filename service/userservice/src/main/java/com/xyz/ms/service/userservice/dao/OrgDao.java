@@ -15,7 +15,7 @@ import java.util.List;
 public class OrgDao extends BaseDao<OrgPo> {
 
     public List<OrgPo> getOrgListByUser(UserPo userPo) {
-        String sql = "SELECT A.ID, A.ORG_CODE, A.ORG_NAME, A.PARENT_ID FROM TU_ORG A " +
+        String sql = "SELECT A.* FROM TU_ORG A " +
                 "JOIN TU_ORG_USER B ON A.ID=B.ORG_ID " +
                 "WHERE B.USER_ID=? ";
 
@@ -31,7 +31,7 @@ public class OrgDao extends BaseDao<OrgPo> {
 
     public OrgPo findTreeById(Long id) {
         OrgPo orgPo = findById(id);
-        String sql = "SELECT A.ID, A.ORG_CODE, A.ORG_NAME, A.PARENT_ID FROM TU_ORG A " +
+        String sql = "SELECT A.* FROM TU_ORG A " +
                 "WHERE A.ORG_CODE LIKE ? ORDER BY A.ORG_CODE ASC ";
         String parentOrgCode = StringUtils.isEmpty(orgPo.getOrgCode())?"":orgPo.getOrgCode();
         List<OrgPo> list = this.findBySql(sql, Arrays.asList(parentOrgCode + "%"));

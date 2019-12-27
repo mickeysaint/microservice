@@ -16,11 +16,17 @@ public class MenuPo extends BasePo implements TreeNode<MenuPo> {
     @Column(name="PARENT_ID")
     private Long parentId;
 
+    @Column(name="ID_FULL")
+    private String idFull;
+
     @Column(name="MENU_CODE")
     private String menuCode;
 
     @Column(name="MENU_NAME")
     private String menuName;
+
+    @Column(name="MENU_NAME_FULL")
+    private String menuNameFull;
 
     @Column(name="MENU_SHOW_NAME")
     private String menuShowName;
@@ -90,5 +96,21 @@ public class MenuPo extends BasePo implements TreeNode<MenuPo> {
     @Override
     public void setChildren(List<MenuPo> children) {
         this.children = children;
+    }
+
+    public String getIdFull() {
+        return idFull;
+    }
+
+    public void setIdFull(String idFull) {
+        this.idFull = idFull;
+    }
+
+    public String getMenuNameFull() {
+        return menuNameFull;
+    }
+
+    public void setMenuNameFull(String menuNameFull) {
+        this.menuNameFull = menuNameFull;
     }
 }

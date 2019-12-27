@@ -54,4 +54,32 @@ public class OrgService extends BaseService<OrgPo> {
         }
         return parentOrgCode + StringUtils.leftPad(Integer.toString(currIndex), 2,'0');
     }
+
+    public String getOrgNameFull(Long id) {
+        OrgPo orgPo = this.findById(id);
+        if (orgPo == null) {
+            return "";
+        } else {
+            String parentOrgNameFull = getOrgNameFull(orgPo.getParentId());
+            if (StringUtils.isEmpty(parentOrgNameFull)) {
+                return orgPo.getOrgName();
+            } else {
+                return parentOrgNameFull + "/" + orgPo.getOrgName();
+            }
+        }
+    }
+
+    public String getIdFull(Long id) {
+        OrgPo orgPo = this.findById(id);
+        if (orgPo == null) {
+            return "";
+        } else {
+            String parentIdFull = getIdFull(orgPo.getParentId());
+            if (StringUtils.isEmpty(parentIdFull)) {
+                return orgPo.getId().toString();
+            } else {
+                return parentIdFull + "," + orgPo.getId();
+            }
+        }
+    }
 }

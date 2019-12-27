@@ -39,10 +39,14 @@ public class MenuController {
             if (menuPo.getId() != null) {
                 MenuPo editPo = menuService.findById(menuPo.getId());
                 editPo.setMenuName(menuPo.getMenuName());
+                editPo.setMenuNameFull(menuService.getMenuNameFull(menuPo.getId()));
+                editPo.setIdFull("["+menuService.getIdFull(menuPo.getId())+"]");
                 menuService.update(editPo);
             } else {
                 String menuCode = menuService.createMenuCode(menuPo);
                 menuPo.setMenuCode(menuCode);
+                menuPo.setMenuNameFull(menuService.getMenuNameFull(menuPo.getId()));
+                menuPo.setIdFull("["+menuService.getIdFull(menuPo.getId())+"]");
                 menuService.save(menuPo);
             }
         } catch(BusinessException e) {

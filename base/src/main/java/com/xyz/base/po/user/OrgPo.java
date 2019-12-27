@@ -16,11 +16,17 @@ public class OrgPo extends BasePo implements TreeNode<OrgPo> {
     @Column(name="PARENT_ID")
     private Long parentId;
 
+    @Column(name="ID_FULL")
+    private String idFull;
+
     @Column(name="ORG_CODE")
     private String orgCode;
 
     @Column(name="ORG_NAME")
     private String orgName;
+
+    @Column(name="ORG_NAME_FULL")
+    private String orgNameFull;
 
     private List<OrgPo> children = null;
 
@@ -68,5 +74,21 @@ public class OrgPo extends BasePo implements TreeNode<OrgPo> {
 
     public void setOrgName(String orgName) {
         this.orgName = orgName;
+    }
+
+    public String getIdFull() {
+        return idFull;
+    }
+
+    public void setIdFull(String idFull) {
+        this.idFull = idFull;
+    }
+
+    public String getOrgNameFull() {
+        return orgNameFull;
+    }
+
+    public void setOrgNameFull(String orgNameFull) {
+        this.orgNameFull = orgNameFull;
     }
 }

@@ -13,9 +13,9 @@ public class RoleVo extends RolePo {
     @Column(name="ORG_FULL_NAME")
     private String orgFullName;
 
-    private JSONArray orgIdForPage; // 一维向量
+    private JSONArray orgIdFull; // 一维向量
 
-    private JSONArray menuIdsForPage; // 二维向量
+    private JSONArray menuIdFulls; // 二维向量
 
     public String getOrgName() {
         return orgName;
@@ -33,19 +33,19 @@ public class RoleVo extends RolePo {
         this.orgFullName = orgFullName;
     }
 
-    public JSONArray getOrgIdForPage() {
-        return orgIdForPage;
+    public JSONArray getOrgIdFull() {
+        return orgIdFull;
     }
 
-    public void setOrgIdForPage(JSONArray orgIdForPage) {
-        this.orgIdForPage = orgIdForPage;
+    public void setOrgIdFull(JSONArray orgIdFull) {
+        this.orgIdFull = orgIdFull;
     }
 
-    public JSONArray getMenuIdsForPage() {
-        return menuIdsForPage;
+    public JSONArray getMenuIdFulls() {
+        return menuIdFulls;
     }
 
-    public void setMenuIdsForPage(JSONArray menuIdsForPage) {
-        this.menuIdsForPage = menuIdsForPage;
+    public void setMenuIdFulls(JSONArray menuIdFulls) {
+        this.menuIdFulls = menuIdFulls;
     }
 }
