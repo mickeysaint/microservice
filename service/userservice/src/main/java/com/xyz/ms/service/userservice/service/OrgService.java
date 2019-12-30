@@ -56,6 +56,10 @@ public class OrgService extends BaseService<OrgPo> {
     }
 
     public String getOrgNameFull(Long id) {
+        if (id == null) {
+            return "";
+        }
+
         OrgPo orgPo = this.findById(id);
         if (orgPo == null) {
             return "";
@@ -70,6 +74,10 @@ public class OrgService extends BaseService<OrgPo> {
     }
 
     public String getIdFull(Long id) {
+        if (id == null) {
+            return "";
+        }
+
         OrgPo orgPo = this.findById(id);
         if (orgPo == null) {
             return "";

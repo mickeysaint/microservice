@@ -59,6 +59,10 @@ public class MenuService extends BaseService<MenuPo> {
     }
 
     public String getMenuNameFull(Long id) {
+        if (id == null) {
+            return "";
+        }
+
         MenuPo menuPo = this.findById(id);
         if (menuPo == null) {
             return "";
@@ -73,6 +77,10 @@ public class MenuService extends BaseService<MenuPo> {
     }
 
     public String getIdFull(Long id) {
+        if (id == null) {
+            return "";
+        }
+
         MenuPo menuPo = this.findById(id);
         if (menuPo == null) {
             return "";

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.xyz.base.common.Page;
 import com.xyz.base.common.ResultBean;
 import com.xyz.base.exception.BusinessException;
+import com.xyz.base.po.user.MenuPo;
 import com.xyz.base.po.user.RolePo;
 import com.xyz.base.po.user.UserPo;
 import com.xyz.base.util.AssertUtils;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -93,6 +95,14 @@ public class RoleController {
         ResultBean<Page<RoleVo>> ret = new ResultBean<>();
         Page<RoleVo> roles = roleService.getListData(params, currentUser);
         ret.setData(roles);
+        return ret;
+    }
+
+    @RequestMapping("/getMenuTreeByRole")
+    public ResultBean<List<MenuPo>> getMenuTreeByRole(@RequestParam Long roleId) {
+        ResultBean<List<MenuPo>> ret = new ResultBean<>();
+        List<MenuPo> menus = roleService.getMenuTreeByRole(roleId);
+        ret.setData(menus);
         return ret;
     }
 }

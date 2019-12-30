@@ -15,14 +15,14 @@ public class TreeUtils {
         }
 
         List<T> convertedList = getChildren(treeNodeList, 0L);
-
+        TreeUtils.clearEmptyChildren(convertedList);
         return convertedList;
     }
 
     public static <T extends TreeNode> List<T> convertList2Tree(List<T> treeNodeList, Long parentId) {
         Assert.notNull(parentId, "parentId can not be null");
         List<T> convertedList = getChildren(treeNodeList, parentId);
-
+        TreeUtils.clearEmptyChildren(convertedList);
         return convertedList;
     }
 

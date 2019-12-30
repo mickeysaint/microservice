@@ -62,14 +62,6 @@ public class UserService extends BaseService<UserPo> {
 
             // 设置用户的菜单
             List<MenuPo> menuList = menuDao.getMenuListByRole(roleList);
-//            List<MenuPo> newMenuList = new ArrayList<>();
-//            if (menuList != null && menuList.size() > 0) {
-//                for (MenuPo menoPo : menuList) {
-//                    if (menoPo.getChildren() != null && menoPo.getChildren().size() > 0) {
-//                        newMenuList.add(menoPo);
-//                    }
-//                }
-//            }
             ret.setMenuList(menuList);
 
             // 获取用户所属的组织

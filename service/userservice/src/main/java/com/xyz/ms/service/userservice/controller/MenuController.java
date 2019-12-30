@@ -29,7 +29,7 @@ public class MenuController {
     Logger logger = LoggerFactory.getLogger(MenuController.class);
 
     @RequestMapping("/save")
-    public ResultBean<Void> save(MenuPo menuPo) {
+    public ResultBean<Void> save(@RequestBody MenuPo menuPo) {
         ResultBean<Void> ret = new ResultBean<>();
         try {
             AssertUtils.isTrue(menuPo != null, "没有接收到菜单数据。");
