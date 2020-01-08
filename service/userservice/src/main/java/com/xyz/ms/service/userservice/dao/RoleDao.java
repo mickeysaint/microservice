@@ -10,6 +10,7 @@ import com.xyz.base.service.BaseDao;
 import com.xyz.base.util.MapUtils;
 import com.xyz.base.vo.user.RoleVo;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,9 @@ import java.util.Map;
 
 @Repository("roleDao")
 public class RoleDao extends BaseDao<RolePo> {
+
+    @Autowired
+    private OrgDao orgDao;
 
     public List<RolePo> getRoleListByUser(UserPo userPo) {
         String sql = "SELECT A.ID, A.ROLE_CODE, A.ROLE_NAME, A.ORG_ID FROM TU_ROLE A " +
@@ -55,10 +59,11 @@ public class RoleDao extends BaseDao<RolePo> {
                 "join tu_role_menu c on a.id=c.role_id " +
                 "join tu_menu d on c.menu_id=d.id " +
                 "where 1=1 %s " +
-                "GROUP BY a.ID, a.ORG_ID, A.ROLE_CODE, A.ROLE_NAME, b.ORG_NAME, b.ID_FULL ";
+                "GROUP BY a.ID, a.ORG_ID, A.ROLE_CODE, A.ROLE_NAME, b.ORG_NAME, b.ID_FULL " +
+                "ORDER BY A.ROLE_CODE ";
         String dsql = "";
         List params = new ArrayList();
-        List<Long> orgIdList = getOrgIdList(orgList);
+        List<Long> orgIdList = orgDao.getOrgIdList(orgList);
         if (orgIdList != null && orgIdList.size() > 0) {
             dsql += " and (a.org_id in (" + StringUtils.join(orgIdList, ",") + ") or a.org_id is null) ";
         } else {
@@ -137,17 +142,4 @@ public class RoleDao extends BaseDao<RolePo> {
         return ret;
     }
 
-    private List<Long> getOrgIdList(List<OrgPo> orgList) {
-        List<Long> retList = new ArrayList<Long>();
-        if (orgList != null && orgList.size() > 0) {
-            for (OrgPo orgPo : orgList) {
-                retList.add(orgPo.getId());
-                List<Long> childrenIdList = getOrgIdList(orgPo.getChildren());
-                if (childrenIdList != null && childrenIdList.size() > 0) {
-                    retList.addAll(childrenIdList);
-                }
-            }
-        }
-        return retList;
-    }
 }

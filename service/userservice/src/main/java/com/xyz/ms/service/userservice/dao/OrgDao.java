@@ -39,4 +39,18 @@ public class OrgDao extends BaseDao<OrgPo> {
         orgPo.setChildren(children);
         return orgPo;
     }
+
+    public List<Long> getOrgIdList(List<OrgPo> orgList) {
+        List<Long> retList = new ArrayList<Long>();
+        if (orgList != null && orgList.size() > 0) {
+            for (OrgPo orgPo : orgList) {
+                retList.add(orgPo.getId());
+                List<Long> childrenIdList = getOrgIdList(orgPo.getChildren());
+                if (childrenIdList != null && childrenIdList.size() > 0) {
+                    retList.addAll(childrenIdList);
+                }
+            }
+        }
+        return retList;
+    }
 }
