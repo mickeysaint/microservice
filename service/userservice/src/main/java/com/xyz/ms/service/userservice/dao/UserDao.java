@@ -22,9 +22,10 @@ public class UserDao extends BaseDao<UserPo> {
 
     public Page<UserVo> getListData(Long pageIndex, Long pageSize,
                                     List<OrgPo> orgList, String username, String userFullName) {
-        String sql = "select a.ID, A.USER_NAME, A.USER_FULL_NAME, GROUP_CONCAT(c.ID SEPARATOR ',') ORG_IDS, " +
+        String sql = "select a.ID, A.USER_NAME, A.USER_FULL_NAME, " +
+                "concat('[', GROUP_CONCAT(c.ID_FULL SEPARATOR ','), ']') ORG_IDS, " +
                 "GROUP_CONCAT(c.ORG_NAME SEPARATOR ',') ORG_NAMES, " +
-                "GROUP_CONCAT(e.ID SEPARATOR ',') ROLE_IDS, " +
+                "concat('[', GROUP_CONCAT(e.ID SEPARATOR ','), ']') ROLE_IDS, " +
                 "GROUP_CONCAT(e.ROLE_NAME SEPARATOR ',') ROLE_NAMES " +
                 " from TU_USER a " +
                 "join tu_org_user b on a.id=b.USER_ID " +
@@ -51,7 +52,26 @@ public class UserDao extends BaseDao<UserPo> {
         }
 
         Page<UserVo> page = this.findPageBySql(String.format(sql, dsql), params, pageIndex.intValue(), pageSize.intValue(), UserVo.class);
+        List<UserVo> userVoList = page.getDataList();
+        justfyOrgIdFull(userVoList, orgList); // 因为页面展示的orgId向量并非从root开始，所以从orgList开始进行修正
         return page;
+    }
+
+    /**
+     * 因为页面展示的orgId向量并非从root开始，所以从orgList开始进行修正
+     * @param userVoList
+     * @param orgList
+     */
+    private void justfyOrgIdFull(List<UserVo> userVoList, List<OrgPo> orgList) {
+        if (userVoList == null || userVoList.size() == 0) {
+            return;
+        }
+
+        for (UserVo userVo : userVoList) {
+            String orgIdFull = userVo.getOrgIds().substring(1, userVo.getOrgIds().length()-1);
+            String orgIdFullJustified = orgDao.getOrgIdFullJustified(orgIdFull, orgList);
+            userVo.setOrgIds(orgIdFullJustified);
+        }
     }
 
     public void deleteOrgUser(Long userId) {

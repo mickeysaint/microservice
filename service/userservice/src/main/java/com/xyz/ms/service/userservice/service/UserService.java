@@ -140,7 +140,6 @@ public class UserService extends BaseService<UserPo> {
         } else { // 更新
             userPo = findById(userVo.getId());
             userPo.setUserFullName(userVo.getUserFullName());
-            userPo.setPassword(new BCryptPasswordEncoder().encode(userVo.getPassword()));
             this.update(userPo);
 
             userDao.deleteOrgUser(userVo.getId()); // 删除用户关联的组织
@@ -150,5 +149,18 @@ public class UserService extends BaseService<UserPo> {
             userDao.addRoleUser(userVo.getId(), userVo.getRoleIds()); // 重新建立角色与用户的关联关系
         }
 
+    }
+
+    @Transactional
+    public void deleteUserByIds(List<Long> userIdList) {
+        if (userIdList == null || userIdList.size() == 0) {
+            return;
+        }
+
+        for (Long userId : userIdList) {
+            userDao.deleteOrgUser(userId); // 删除用户关联的组织
+            userDao.deleteRoleUser(userId); // 删除用户关联的角色
+        }
+        userDao.deleteByIds(userIdList);
     }
 }

@@ -96,50 +96,13 @@ public class RoleDao extends BaseDao<RolePo> {
             return;
         }
 
-        Map<Long, OrgPo> orgPoMapping = MapUtils.convertList2Map(orgList, "id", Long.class, OrgPo.class);
         for (RoleVo roleVo : roleVoList) {
             String orgIdFull = roleVo.getOrgIdFull();
-            String orgIdFullJustified = getOrgIdFullJustified(orgIdFull, orgList);
+            String orgIdFullJustified = orgDao.getOrgIdFullJustified(orgIdFull, orgList);
             roleVo.setOrgIdFull(orgIdFullJustified);
         }
     }
 
-    private String getOrgIdFullJustified(String orgIdFull, List<OrgPo> orgList) {
-        if (StringUtils.isEmpty(orgIdFull)) {
-            return "[]";
-        }
 
-        String ret = "[]";
-        JSONArray jaOrgIdFull = JSON.parseArray(orgIdFull);
-        if (jaOrgIdFull.size() == 0) {
-            return ret;
-        }
-
-        for (OrgPo org: orgList) {
-            String idFull = org.getIdFull();
-            JSONArray ja = JSON.parseArray(idFull);
-            Long orgId = org.getId();
-
-            JSONArray jaNew = new JSONArray();
-            boolean matched = false;
-            for (int i=0; i<jaOrgIdFull.size(); i++) {
-                if (matched) {
-                    jaNew.add(jaOrgIdFull.getLong(i));
-                } else {
-                    if (orgId.equals(jaOrgIdFull.getLong(i))) {
-                        matched = true;
-                        jaNew.add(jaOrgIdFull.getLong(i));
-                    }
-                }
-            }
-
-            if (jaNew.size() > 0) {
-                ret = jaNew.toJSONString();
-                break;
-            }
-        }
-
-        return ret;
-    }
 
 }

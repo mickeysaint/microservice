@@ -1,5 +1,7 @@
 package com.xyz.ms.service.userservice.dao;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.xyz.base.po.user.OrgPo;
 import com.xyz.base.po.user.UserPo;
 import com.xyz.base.service.BaseDao;
@@ -52,5 +54,41 @@ public class OrgDao extends BaseDao<OrgPo> {
             }
         }
         return retList;
+    }
+
+    public String getOrgIdFullJustified(String orgIdFull, List<OrgPo> orgList) {
+        if (StringUtils.isEmpty(orgIdFull)) {
+            return "[]";
+        }
+
+        String ret = "[]";
+        JSONArray jaOrgIdFull = JSON.parseArray(orgIdFull);
+        if (jaOrgIdFull.size() == 0) {
+            return ret;
+        }
+
+        for (OrgPo org: orgList) {
+            Long orgId = org.getId();
+
+            JSONArray jaNew = new JSONArray();
+            boolean matched = false;
+            for (int i=0; i<jaOrgIdFull.size(); i++) {
+                if (matched) {
+                    jaNew.add(jaOrgIdFull.getLong(i));
+                } else {
+                    if (orgId.equals(jaOrgIdFull.getLong(i))) {
+                        matched = true;
+                        jaNew.add(jaOrgIdFull.getLong(i));
+                    }
+                }
+            }
+
+            if (jaNew.size() > 0) {
+                ret = jaNew.toJSONString();
+                break;
+            }
+        }
+
+        return ret;
     }
 }

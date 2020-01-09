@@ -1,5 +1,6 @@
 package com.xyz.ms.service.userservice.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.xyz.base.common.Page;
 import com.xyz.base.common.ResultBean;
 import com.xyz.base.exception.BusinessException;
@@ -94,7 +95,13 @@ public class UserController {
             AssertUtils.isTrue(StringUtils.isNotEmpty(userVo.getUserFullName()), "用户姓名不能为空。");
             AssertUtils.isTrue(StringUtils.isNotEmpty(userVo.getPassword()), "密码不能为空。");
 
-            AssertUtils.isTrue(!userService.exists(userVo.getUsername()), "该用户已经存在。");
+
+            AssertUtils.isTrue(
+                    (
+                            (userVo.getId() != null) // 更新时不校验用户存在与否
+                            || (userVo.getId() == null && !userService.exists(userVo.getUsername())) // 创建时要确保用户不存在
+                    ),
+                    "该用户已经存在。");
 
             userService.saveUser(userVo);
         } catch(BusinessException e) {
@@ -105,6 +112,25 @@ public class UserController {
             ret.setSuccess(false);
             ret.setMessage("操作失败");
             logger.error("操作失败", e);
+        }
+
+        return ret;
+    }
+
+    @RequestMapping("/delete")
+    public ResultBean<Void> delete(@RequestBody JSONArray ids) {
+        ResultBean<Void> ret = new ResultBean<>();
+        try {
+            AssertUtils.isTrue(ids.size() > 0, "待删除数据不能为空。");
+            userService.deleteUserByIds(ids.toJavaList(Long.class));
+        } catch(BusinessException e) {
+            logger.error("删除用户出错", e);
+            ret.setSuccess(false);
+            ret.setMessage(e.getMessage());
+        } catch(Exception e) {
+            logger.error("删除用户出错", e);
+            ret.setSuccess(false);
+            ret.setMessage("操作失败");
         }
 
         return ret;
