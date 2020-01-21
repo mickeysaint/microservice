@@ -45,9 +45,11 @@ public class MenuController {
             } else {
                 String menuCode = menuService.createMenuCode(menuPo);
                 menuPo.setMenuCode(menuCode);
+                menuService.save(menuPo);
+
                 menuPo.setMenuNameFull(menuService.getMenuNameFull(menuPo.getId()));
                 menuPo.setIdFull("["+menuService.getIdFull(menuPo.getId())+"]");
-                menuService.save(menuPo);
+                menuService.update(menuPo);
             }
         } catch(BusinessException e) {
             logger.error("保存菜单出错", e);

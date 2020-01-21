@@ -8,9 +8,7 @@ import com.xyz.base.util.TreeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Repository("menuDao")
 public class MenuDao extends BaseDao<MenuPo> {
@@ -57,11 +55,21 @@ public class MenuDao extends BaseDao<MenuPo> {
             return null;
         }
 
-        List<MenuPo> menuPoList = new ArrayList<MenuPo>();
+        Set<Long> menuIds = new HashSet<Long>();
         for (int i=0; i<idFulls.size(); i++) {
             JSONArray jaIdFull = idFulls.getJSONArray(i);
-            menuPoList.add(findById(Long.valueOf(jaIdFull.get(jaIdFull.size()-1).toString())));
+            if (jaIdFull.size() > 0) {
+                for (int j=0; j<jaIdFull.size(); j++) {
+                    menuIds.add(jaIdFull.getLong(j));
+                }
+            }
         }
+
+        List<MenuPo> menuPoList = new ArrayList<MenuPo>();
+        for (Long menuId : menuIds) {
+            menuPoList.add(findById(menuId));
+        }
+
         return menuPoList;
     }
 }

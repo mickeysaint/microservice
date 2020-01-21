@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,30 +34,6 @@ public class UserController {
     @RequestMapping("/foo")
     public String foo() {
         return foo;
-    }
-
-    @RequestMapping("/add")
-    public ResultBean<Void> add(UserPo userPo) {
-        ResultBean<Void> ret = new ResultBean<>();
-        try {
-            AssertUtils.isTrue(userPo != null, "没有接收到用户数据。");
-            AssertUtils.isTrue(StringUtils.isNotEmpty(userPo.getUsername()), "用户编码不能为空。");
-            AssertUtils.isTrue(StringUtils.isNotEmpty(userPo.getUserFullName()), "用户姓名不能为空。");
-            AssertUtils.isTrue(StringUtils.isNotEmpty(userPo.getPassword()), "密码不能为空。");
-
-            AssertUtils.isTrue(userService.exists(userPo.getUsername()), "该用户已经存在。");
-
-            userPo.setPassword(new BCryptPasswordEncoder().encode(userPo.getPassword()));
-            userService.save(userPo);
-        } catch(BusinessException e) {
-            ret.setSuccess(false);
-            ret.setMessage(e.getMessage());
-        } catch(Exception e) {
-            ret.setSuccess(false);
-            ret.setMessage("操作失败");
-        }
-
-        return ret;
     }
 
     @RequestMapping("/findById")
