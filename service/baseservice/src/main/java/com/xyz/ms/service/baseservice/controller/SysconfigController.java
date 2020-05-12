@@ -1,5 +1,6 @@
 package com.xyz.ms.service.baseservice.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.xyz.base.common.Page;
 import com.xyz.base.common.ResultBean;
 import com.xyz.base.exception.BusinessException;
@@ -47,10 +48,21 @@ public class SysconfigController {
     }
 
     @RequestMapping("/delete")
-    public ResultBean<Void> delete(Long id) {
-        SysConfigPo sysconfig = sysConfigService.findById(id);
-        sysConfigService.delete(sysconfig);
-        ResultBean<Void> ret = new ResultBean<Void>();
+    public ResultBean<Void> delete(@RequestBody JSONArray ids) {
+        ResultBean<Void> ret = new ResultBean<>();
+        try {
+            AssertUtils.isTrue(ids.size() > 0, "待删除数据不能为空。");
+            sysConfigService.deleteByIds(ids.toJavaList(Long.class));
+        } catch(BusinessException e) {
+            logger.error("删除出错", e);
+            ret.setSuccess(false);
+            ret.setMessage(e.getMessage());
+        } catch(Exception e) {
+            logger.error("删除出错", e);
+            ret.setSuccess(false);
+            ret.setMessage("操作失败");
+        }
+
         return ret;
     }
 
@@ -67,16 +79,16 @@ public class SysconfigController {
         ResultBean<Void> ret = new ResultBean<>();
         try {
             AssertUtils.isTrue(sysConfigPo != null, "没有接收到数据。");
-            AssertUtils.isTrue(StringUtils.isNotEmpty(sysConfigPo.getConfigKey()), "配置项代码不能为空。");
-            AssertUtils.isTrue(StringUtils.isNotEmpty(sysConfigPo.getConfigName()), "配置项名称不能为空。");
-            AssertUtils.isTrue(StringUtils.isNotEmpty(sysConfigPo.getConfigValue()), "配置项值不能为空。");
+            AssertUtils.isTrue(StringUtils.isNotEmpty(sysConfigPo.getConfigKey()), "参数代码不能为空。");
+            AssertUtils.isTrue(StringUtils.isNotEmpty(sysConfigPo.getConfigName()), "参数名称不能为空。");
+            AssertUtils.isTrue(StringUtils.isNotEmpty(sysConfigPo.getConfigValue()), "参数值不能为空。");
 
             AssertUtils.isTrue(
                     (
                             (sysConfigPo.getId() != null)
                                     || (sysConfigPo.getId() == null && !sysConfigService.exists(sysConfigPo.getConfigKey()))
                     ),
-                    "该配置项已经存在。");
+                    "该参数已经存在。");
 
             if (sysConfigPo.getId() != null) {
                 SysConfigPo editPo = sysConfigService.findById(sysConfigPo.getId());
@@ -85,14 +97,14 @@ public class SysconfigController {
                 editPo.setRemark(sysConfigPo.getRemark());
                 sysConfigService.update(editPo);
             } else {
-                sysConfigService.update(sysConfigPo);
+                sysConfigService.save(sysConfigPo);
             }
         } catch(BusinessException e) {
-            logger.error("保存组织结构出错", e);
+            logger.error("保存出错", e);
             ret.setSuccess(false);
             ret.setMessage(e.getMessage());
         } catch(Exception e) {
-            logger.error("保存组织结构出错", e);
+            logger.error("保存出错", e);
             ret.setSuccess(false);
             ret.setMessage("操作失败");
         }
