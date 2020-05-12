@@ -35,7 +35,7 @@ public class AuthFilter extends ZuulFilter {
         return true;
     }
 
-    private List<String> noCheckUrls = Arrays.asList("/service-oauth2/oauth2/login");
+    private List<String> noCheckUrls = Arrays.asList("/service-oauth2/oauth2/login", "/service-oauth2/oauth/token");
 
     @Override
     public Object run() throws ZuulException {

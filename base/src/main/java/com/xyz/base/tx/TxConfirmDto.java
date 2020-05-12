@@ -1,7 +1,7 @@
 package com.xyz.base.tx;
 
 /**
- * 确认的DTO
+ * confirm 将预留的资源变为实际已生效的资源
  */
 public class TxConfirmDto {
     private String txId; // 事务UUID

@@ -16,9 +16,7 @@ import java.util.List;
 public class OrgService extends BaseService<OrgPo> {
 
     @Autowired
-    @Override
-    @Qualifier("orgDao")
-    public void setDao(BaseDao<OrgPo> dao) {
+    public void setDao(OrgDao dao) {
         this.dao = dao;
     }
 

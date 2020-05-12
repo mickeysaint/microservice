@@ -10,8 +10,6 @@ public abstract class BaseService<T extends BasePo> {
 
     protected BaseDao<T> dao = null;
 
-    public abstract void setDao(BaseDao<T> dao);
-
     public T findById(long id) {
         return dao.findById(id);
     }

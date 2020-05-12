@@ -3,12 +3,10 @@ package com.xyz.ms.service.baseservice.service;
 import com.xyz.base.common.Constants;
 import com.xyz.base.common.Page;
 import com.xyz.base.po.base.SysConfigPo;
-import com.xyz.base.service.BaseDao;
 import com.xyz.base.service.BaseService;
 import com.xyz.base.util.StringUtil;
 import com.xyz.ms.service.baseservice.dao.SysConfigDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,9 +19,7 @@ public class SysConfigService extends BaseService<SysConfigPo> {
     private SysConfigDao sysConfigDao;
 
     @Autowired
-    @Qualifier("sysConfigDao")
-    @Override
-    public void setDao(BaseDao<SysConfigPo> dao) {
+    public void setDao(SysConfigDao dao) {
         this.dao = dao;
     }
 

@@ -29,7 +29,6 @@ import java.util.*;
 public class RoleService extends BaseService<RolePo> {
 
     @Autowired
-    @Qualifier("roleDao")
     private RoleDao roleDao;
 
     @Autowired
@@ -39,9 +38,7 @@ public class RoleService extends BaseService<RolePo> {
     private OrgDao orgDao;
 
     @Autowired
-    @Override
-    @Qualifier("roleDao")
-    public void setDao(BaseDao<RolePo> dao) {
+    public void setDao(RoleDao dao) {
         this.dao = dao;
     }
 

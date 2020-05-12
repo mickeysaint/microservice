@@ -47,13 +47,10 @@ public class UserService extends BaseService<UserPo> {
     private MenuDao menuDao;
 
     @Autowired
-    @Qualifier("userDao")
     private UserDao userDao;
 
     @Autowired
-    @Override
-    @Qualifier("userDao")
-    public void setDao(BaseDao<UserPo> dao) {
+    public void setDao(UserDao dao) {
         this.dao = dao;
     }
 

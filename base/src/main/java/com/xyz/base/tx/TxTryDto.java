@@ -1,5 +1,8 @@
 package com.xyz.base.tx;
 
+/**
+ * try 为本事务预留资源
+ */
 public class TxTryDto {
 
     private String txId; // 事务UUID
@@ -7,8 +10,6 @@ public class TxTryDto {
     private String txCode; // 事务代码
 
     private String txName; // 事务名称
-
-    private String txData; // try操作关联的数据（JSON格式）
 
     public String getTxId() {
         return txId;
@@ -32,13 +33,5 @@ public class TxTryDto {
 
     public void setTxName(String txName) {
         this.txName = txName;
-    }
-
-    public String getTxData() {
-        return txData;
-    }
-
-    public void setTxData(String txData) {
-        this.txData = txData;
     }
 }

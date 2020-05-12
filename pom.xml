@@ -23,6 +23,7 @@
         <module>common</module>
         <module>service</module>
         <module>base</module>
+        <module>quartz</module>
     </modules>
 
     <build>

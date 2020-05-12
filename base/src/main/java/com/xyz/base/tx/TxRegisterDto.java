@@ -19,6 +19,8 @@ public class TxRegisterDto {
 
     private List<TxRegisterDto_CalleeDto> txCalleeData; // 被调用者的事务数据（包括路径和参数）
 
+    private String txStatus; // 事务状态   init/try_ok/try_failed/confirm_ok/cancel_ok
+
     public String getTxCode() {
         return txCode;
     }
@@ -67,25 +69,73 @@ public class TxRegisterDto {
         this.txCalleeData = txCalleeData;
     }
 
+    public String getTxStatus() {
+        return txStatus;
+    }
+
+    public void setTxStatus(String txStatus) {
+        this.txStatus = txStatus;
+    }
+
     class TxRegisterDto_CalleeDto {
-        private String txUrl; // 被调用者的doTry地址
+        private String txUrlTry; // 被调用者的doTry地址
 
-        private String params; // 被调用者的地址对应的参数，JSON格式
+        private String paramsTry; // 被调用者的地址对应的参数，JSON格式
 
-        public String getTxUrl() {
-            return txUrl;
+        private String txUrlConfirm;
+
+        private String paramsConfirm;
+
+        private String txUrlCancel;
+
+        private String paramsCancel;
+
+        public String getTxUrlTry() {
+            return txUrlTry;
         }
 
-        public void setTxUrl(String txUrl) {
-            this.txUrl = txUrl;
+        public void setTxUrlTry(String txUrlTry) {
+            this.txUrlTry = txUrlTry;
         }
 
-        public String getParams() {
-            return params;
+        public String getParamsTry() {
+            return paramsTry;
         }
 
-        public void setParams(String params) {
-            this.params = params;
+        public void setParamsTry(String paramsTry) {
+            this.paramsTry = paramsTry;
+        }
+
+        public String getTxUrlConfirm() {
+            return txUrlConfirm;
+        }
+
+        public void setTxUrlConfirm(String txUrlConfirm) {
+            this.txUrlConfirm = txUrlConfirm;
+        }
+
+        public String getParamsConfirm() {
+            return paramsConfirm;
+        }
+
+        public void setParamsConfirm(String paramsConfirm) {
+            this.paramsConfirm = paramsConfirm;
+        }
+
+        public String getTxUrlCancel() {
+            return txUrlCancel;
+        }
+
+        public void setTxUrlCancel(String txUrlCancel) {
+            this.txUrlCancel = txUrlCancel;
+        }
+
+        public String getParamsCancel() {
+            return paramsCancel;
+        }
+
+        public void setParamsCancel(String paramsCancel) {
+            this.paramsCancel = paramsCancel;
         }
     }
 }

@@ -90,7 +90,9 @@ public class OAuth2Controller {
                 userPo = rt.getData();
             }
 
-            String url = "http://localhost:9999/oauth/token?grant_type=password&username="
+//            String url = "http://localhost:9999/oauth/token?grant_type=password&username="
+//                    + username + "&password=" + password;
+            String url = "http://localhost:8040/service-oauth2/oauth/token?grant_type=password&username="
                     + username + "&password=" + password;
             logger.info("开始登录：" + url);
             HttpGet httpGet = new HttpGet(url);

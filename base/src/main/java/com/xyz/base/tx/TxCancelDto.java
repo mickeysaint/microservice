@@ -1,7 +1,7 @@
 package com.xyz.base.tx;
 
 /**
- * 取消的DTO
+ * cancel 将预留的资源变为实际已取消的资源
  */
 public class TxCancelDto {
 

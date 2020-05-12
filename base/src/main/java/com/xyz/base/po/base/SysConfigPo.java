@@ -5,7 +5,7 @@ import com.xyz.base.po.BasePo;
 import javax.persistence.Column;
 import javax.persistence.Table;
 
-@Table(name="tb_sysconfig")
+@Table(name="tb_sys_config")
 public class SysConfigPo extends BasePo {
 
     @Column(name="ID")

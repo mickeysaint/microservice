@@ -2,12 +2,10 @@ package com.xyz.ms.service.userservice.service;
 
 import com.xyz.base.exception.BusinessException;
 import com.xyz.base.po.user.MenuPo;
-import com.xyz.base.service.BaseDao;
 import com.xyz.base.service.BaseService;
 import com.xyz.ms.service.userservice.dao.MenuDao;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,13 +14,10 @@ import java.util.List;
 public class MenuService extends BaseService<MenuPo> {
 
     @Autowired
-    @Qualifier("menuDao")
     private MenuDao menuDao;
 
     @Autowired
-    @Override
-    @Qualifier("menuDao")
-    public void setDao(BaseDao<MenuPo> dao) {
+    public void setDao(MenuDao dao) {
         this.dao = dao;
     }
 
