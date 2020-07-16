@@ -17,6 +17,7 @@
         <module>auth</module>
         <module>config</module>
         <module>txmanager</module>
+        <module>quartz</module>
     </modules>
 
     <build>

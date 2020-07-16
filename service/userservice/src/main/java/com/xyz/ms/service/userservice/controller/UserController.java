@@ -26,6 +26,9 @@ public class UserController {
     @Value("${foo}")
     private String foo;
 
+    @Value("${foo2}")
+    private String foo2;
+
     @Autowired
     private UserService userService;
 
@@ -34,6 +37,11 @@ public class UserController {
     @RequestMapping("/foo")
     public String foo() {
         return foo;
+    }
+
+    @RequestMapping("/foo2")
+    public String foo2() {
+        return foo2;
     }
 
     @RequestMapping("/findById")

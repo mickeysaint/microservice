@@ -1,10 +1,9 @@
 package com.xyz.base.service;
 
-import com.alibaba.fastjson.JSONArray;
 import com.xyz.base.common.Page;
 import com.xyz.base.po.BasePo;
-import com.xyz.base.vo.user.RoleVo;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.BeanWrapper;
@@ -22,10 +21,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
 
@@ -86,6 +82,8 @@ public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
     }
 
     public List<T> findBySql(String sql, List<Object> params) {
+        params = convertParams(params);
+
         List<Map<String, Object>> mlist = jt.queryForList(sql, params.toArray());
         List<T> rlist = new ArrayList<>();
         if (CollectionUtils.isEmpty(mlist)) {
@@ -96,7 +94,26 @@ public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
         }
     }
 
+    private List<Object> convertParams(List<Object> params) {
+        if (params == null) {
+            params = new ArrayList<Object>();
+        }
+
+        List<Object> paramsNew = new ArrayList<Object>();
+        for (Object o : params) {
+            if (o instanceof Date) {
+                paramsNew.add(FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").format(o));
+            } else {
+                paramsNew.add(o);
+            }
+        }
+
+        return paramsNew;
+    }
+
     public Page<T> findPageBySql(String sql, List<Object> params, int pageIndex, int pageSize) {
+        params = convertParams(params);
+
         String sqlCount = "select count(1) from (" + sql + ") t_main ";
         int offset = (pageIndex-1)*pageSize;
         String sqlList = "select * from (" + sql + ") t_main limit " + offset + ", " + pageSize;
@@ -282,6 +299,8 @@ public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
 
     protected <E> Page<E> findPageBySql(String sql, List params, int pageIndex, int pageSize,
                                              Class<E> clazz) {
+        params = convertParams(params);
+
         String sqlCount = "select count(1) from (" + sql + ") t_main ";
         int offset = (pageIndex-1)*pageSize;
         String sqlList = "select * from (" + sql + ") t_main limit " + offset + ", " + pageSize;
@@ -292,6 +311,8 @@ public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
     }
 
     public <E> List<E> findBySql(String sql, List<Object> params, Class<E> clazz) {
+        params = convertParams(params);
+
         List<Map<String, Object>> mlist = jt.queryForList(sql, params.toArray());
         List<E> rlist = new ArrayList<>();
         if (CollectionUtils.isEmpty(mlist)) {

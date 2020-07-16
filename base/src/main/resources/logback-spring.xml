@@ -21,7 +21,19 @@
         </encoder>
     </appender>
 
-    <root level="DEBUG">
+    <!--显示日志-->
+    <logger name="org.springframework.jdbc.core" additivity="false" level="DEBUG" >
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <!--显示日志-->
+    <logger name="org.springframework.jdbc.core.StatementCreatorUtils" additivity="false" level="TRACE" >
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>
