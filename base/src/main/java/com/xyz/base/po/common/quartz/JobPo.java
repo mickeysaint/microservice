@@ -1,6 +1,8 @@
 package com.xyz.base.po.common.quartz;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xyz.base.po.BasePo;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -27,9 +29,13 @@ public class JobPo extends BasePo {
     @Column(name="JOB_METHOD")
     private String jobMethod;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Column(name="RUNTIME_LAST")
     private Date runtimeLast;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Column(name="RUNTIME_NEXT")
     private Date runtimeNext;
 

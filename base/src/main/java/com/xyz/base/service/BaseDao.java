@@ -81,6 +81,16 @@ public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
         return findBySql(sql, params);
     }
 
+    public Page<T> findPageByEg(T eg, String orderBy, long pageIndex, long pageSize) {
+        Assert.notNull(eg, "eg can not be null. ");
+        List<Object> params = new ArrayList<>();
+        String sql = buildSql_findByEg(eg, params);
+        if (!StringUtils.isEmpty(orderBy)) {
+            sql += " " + orderBy;
+        }
+        return findPageBySql(sql, params, pageIndex, pageSize);
+    }
+
     public List<T> findBySql(String sql, List<Object> params) {
         params = convertParams(params);
 
@@ -111,11 +121,11 @@ public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
         return paramsNew;
     }
 
-    public Page<T> findPageBySql(String sql, List<Object> params, int pageIndex, int pageSize) {
+    public Page<T> findPageBySql(String sql, List<Object> params, long pageIndex, long pageSize) {
         params = convertParams(params);
 
         String sqlCount = "select count(1) from (" + sql + ") t_main ";
-        int offset = (pageIndex-1)*pageSize;
+        long offset = (pageIndex-1)*pageSize;
         String sqlList = "select * from (" + sql + ") t_main limit " + offset + ", " + pageSize;
         Page<T> page = new Page<>();
         page.setCount(jt.queryForObject(sqlCount, params.toArray(), Long.class));
@@ -181,7 +191,7 @@ public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
             String dbFieldName = e.getValue();
             dbFieldNames.add(dbFieldName);
             Object v = bw.getPropertyValue(javaFieldName);
-            if (v != null) {
+            if (v != null && !"".equals(v)) {
                 params.add(v);
                 conditionList.add(dbFieldName + "=?");
             }
@@ -297,12 +307,12 @@ public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
         jt.update(sql);
     }
 
-    protected <E> Page<E> findPageBySql(String sql, List params, int pageIndex, int pageSize,
+    protected <E> Page<E> findPageBySql(String sql, List params, long pageIndex, long pageSize,
                                              Class<E> clazz) {
         params = convertParams(params);
 
         String sqlCount = "select count(1) from (" + sql + ") t_main ";
-        int offset = (pageIndex-1)*pageSize;
+        long offset = (pageIndex-1)*pageSize;
         String sqlList = "select * from (" + sql + ") t_main limit " + offset + ", " + pageSize;
         Page<E> page = new Page<>();
         page.setCount(jt.queryForObject(sqlCount, params.toArray(), Long.class));

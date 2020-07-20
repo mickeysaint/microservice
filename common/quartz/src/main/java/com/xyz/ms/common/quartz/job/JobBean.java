@@ -57,7 +57,7 @@ public class JobBean extends QuartzJobBean {
 
         JobService jobService = ApplicationContextHolder.getApplicationContext().getBean(
                 com.xyz.ms.common.quartz.service.JobService.class);
-        jobService.updateForPostExecute(jobId, runDuration, exeResult);
+        jobService.updateJobForPostExecute(jobId, runDuration, exeResult);
         JobLogService jobLogService = ApplicationContextHolder.getApplicationContext().getBean(
                 com.xyz.ms.common.quartz.service.JobLogService.class);
         jobLogService.writeJobLog(jobId, beginTime, endTime, exeResult, errorMsg);

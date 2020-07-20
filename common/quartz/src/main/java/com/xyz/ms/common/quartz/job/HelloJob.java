@@ -6,8 +6,11 @@ import org.springframework.stereotype.Service;
 public class HelloJob {
 
     public void execute() throws InterruptedException {
-        Thread.sleep(1000);
-        System.out.println("hello2...");
+        System.out.println("hello...1");
+        Thread.sleep(20*1000);
+        System.out.println("hello...2");
+        Thread.sleep(20*1000);
+        System.out.println("hello...3");
     }
 
 }
