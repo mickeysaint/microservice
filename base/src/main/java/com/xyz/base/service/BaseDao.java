@@ -71,6 +71,14 @@ public class BaseDao<T extends BasePo> extends SqlSessionDaoSupport {
         return findByEg(eg, null);
     }
 
+    public T findOneByEg(T eg) {
+        List<T> list = findByEg(eg, null);
+        if (list == null || list.size() == 0) {
+            return null;
+        }
+        return list.get(0);
+    }
+
     public List<T> findByEg(T eg, String orderBy) {
         Assert.notNull(eg, "eg can not be null. ");
         List<Object> params = new ArrayList<>();

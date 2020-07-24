@@ -1,6 +1,6 @@
 package com.xyz.ms.common.quartz.service;
 
-import com.xyz.base.po.common.quartz.JobLogPo;
+import com.xyz.base.po.quartz.JobLogPo;
 import com.xyz.base.service.BaseService;
 import com.xyz.ms.common.quartz.dao.JobLogDao;
 import org.slf4j.Logger;

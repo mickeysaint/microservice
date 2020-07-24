@@ -1,4 +1,4 @@
-package com.xyz.base.po.common.quartz;
+package com.xyz.base.po.quartz;
 
 import com.xyz.base.po.BasePo;
 

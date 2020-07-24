@@ -1,6 +1,6 @@
 package com.xyz.ms.common.quartz.job;
 
-import com.xyz.base.po.common.quartz.JobPo;
+import com.xyz.base.po.quartz.JobPo;
 import com.xyz.ms.common.quartz.bean.ApplicationContextHolder;
 import com.xyz.ms.common.quartz.service.JobLogService;
 import com.xyz.ms.common.quartz.service.JobService;

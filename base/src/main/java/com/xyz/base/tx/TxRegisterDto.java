@@ -11,11 +11,9 @@ public class TxRegisterDto {
 
     private String txName; // 事务名称
 
-    private String txCaller; // 事务发起者
+    private String txCallerService; // 发起事务的微服务名称
 
-    private long timeout = 1000*5; // 事务try操作的超时设置（单位毫秒），默认5秒钟
-
-    private boolean isSerial = false; // 是否串行，默认并行执行
+    private String txCaller; // 事务发起者账号
 
     private List<TxRegisterDto_CalleeDto> txCalleeData; // 被调用者的事务数据（包括路径和参数）
 
@@ -37,28 +35,20 @@ public class TxRegisterDto {
         this.txName = txName;
     }
 
+    public String getTxCallerService() {
+        return txCallerService;
+    }
+
+    public void setTxCallerService(String txCallerService) {
+        this.txCallerService = txCallerService;
+    }
+
     public String getTxCaller() {
         return txCaller;
     }
 
     public void setTxCaller(String txCaller) {
         this.txCaller = txCaller;
-    }
-
-    public long getTimeout() {
-        return timeout;
-    }
-
-    public void setTimeout(long timeout) {
-        this.timeout = timeout;
-    }
-
-    public boolean isSerial() {
-        return isSerial;
-    }
-
-    public void setSerial(boolean serial) {
-        isSerial = serial;
     }
 
     public List<TxRegisterDto_CalleeDto> getTxCalleeData() {
@@ -77,7 +67,7 @@ public class TxRegisterDto {
         this.txStatus = txStatus;
     }
 
-    class TxRegisterDto_CalleeDto {
+    public class TxRegisterDto_CalleeDto {
         private String txUrlTry; // 被调用者的doTry地址
 
         private String paramsTry; // 被调用者的地址对应的参数，JSON格式

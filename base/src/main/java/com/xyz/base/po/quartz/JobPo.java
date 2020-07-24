@@ -1,4 +1,4 @@
-package com.xyz.base.po.common.quartz;
+package com.xyz.base.po.quartz;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xyz.base.po.BasePo;

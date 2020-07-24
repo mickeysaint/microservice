@@ -33,6 +33,10 @@ public abstract class BaseService<T extends BasePo> {
         return dao.findByEg(eg);
     }
 
+    public T findOneByEg(T eg) {
+        return dao.findOneByEg(eg);
+    }
+
     public List<T> findByEg(T eg, String orderBy) {
         return dao.findByEg(eg, orderBy);
     }

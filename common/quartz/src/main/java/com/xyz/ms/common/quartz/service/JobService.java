@@ -3,7 +3,7 @@ package com.xyz.ms.common.quartz.service;
 import com.xyz.base.common.Constants;
 import com.xyz.base.common.Page;
 import com.xyz.base.exception.BusinessException;
-import com.xyz.base.po.common.quartz.JobPo;
+import com.xyz.base.po.quartz.JobPo;
 import com.xyz.base.service.BaseService;
 import com.xyz.base.util.StringUtil;
 import com.xyz.ms.common.quartz.dao.JobDao;

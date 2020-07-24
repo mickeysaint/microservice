@@ -3,7 +3,7 @@ package com.xyz.ms.common.quartz.controller;
 import com.xyz.base.common.Page;
 import com.xyz.base.common.ResultBean;
 import com.xyz.base.exception.BusinessException;
-import com.xyz.base.po.common.quartz.JobPo;
+import com.xyz.base.po.quartz.JobPo;
 import com.xyz.base.util.AssertUtils;
 import com.xyz.ms.common.quartz.service.JobService;
 import org.apache.commons.lang.StringUtils;
