@@ -7,6 +7,7 @@ import com.xyz.base.po.tx.TransactionDetailPo;
 import com.xyz.base.po.tx.TransactionPo;
 import com.xyz.base.service.BaseService;
 import com.xyz.base.tx.TxRegisterDto;
+import com.xyz.base.tx.TxRegisterReturnDto;
 import com.xyz.txmanager.dao.TransactionDao;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -62,7 +63,7 @@ public class TransactionService extends BaseService<TransactionPo>  {
     }
 
     @Transactional
-    public void register(TxRegisterDto dto) {
+    public TxRegisterReturnDto register(TxRegisterDto dto) {
         TransactionPo transactionPo = new TransactionPo();
         transactionPo.setTxId(UUID.randomUUID().toString());
         transactionPo.setTxCode(dto.getTxCode());
@@ -94,9 +95,16 @@ public class TransactionService extends BaseService<TransactionPo>  {
         logger.info(String.format(msgFormat, threadPool.getPoolSize(),
                 threadPool.getTaskCount(), threadPool.getActiveCount()));
 
-        threadPool.execute(() -> {
-            this.execTransaction(transactionPo.getTxId());
-        });
+        TxRegisterReturnDto returnDto = new TxRegisterReturnDto();
+        returnDto.setTxCode(transactionPo.getTxCode());
+        returnDto.setTxName(transactionPo.getTxName());
+        returnDto.setTxId(transactionPo.getTxId());
+
+        return returnDto;
+
+//        threadPool.execute(() -> {
+//            this.execTransaction(transactionPo.getTxId());
+//        });
     }
 
     public void initThreadPool() {
@@ -104,6 +112,12 @@ public class TransactionService extends BaseService<TransactionPo>  {
     }
 
     public void execTransaction(String txId) {
+        threadPool.execute(() -> {
+            this.execTransactionExec(txId);
+        });
+    }
+
+    public void execTransactionExec(String txId) {
         // 获取事务数据
         logger.info("获取事务数据， txId=" + txId);
         TransactionPo transactionPo = findByTxId(txId);
@@ -206,7 +220,9 @@ public class TransactionService extends BaseService<TransactionPo>  {
     private void execTransactionDetailTry(TransactionDetailPo transactionDetailPo) {
         String url = transactionDetailPo.getTxUrlTry();
         String params = transactionDetailPo.getParamsTry();
-        String result = execHttpCall(url, params);
+        JSONObject joParams = JSON.parseObject(params);
+        joParams.put("txId", transactionDetailPo.getTxId());
+        String result = execHttpCall(url, joParams.toString());
         JSONObject joRet = JSON.parseObject(result);
         boolean success = joRet.getBoolean("success");
         if (!success) {
@@ -217,7 +233,9 @@ public class TransactionService extends BaseService<TransactionPo>  {
     private void execTransactionDetailConfirm(TransactionDetailPo transactionDetailPo) {
         String url = transactionDetailPo.getTxUrlConfirm();
         String params = transactionDetailPo.getParamsConfirm();
-        String result = execHttpCall(url, params);
+        JSONObject joParams = JSON.parseObject(params);
+        joParams.put("txId", transactionDetailPo.getTxId());
+        String result = execHttpCall(url, joParams.toString());
         JSONObject joRet = JSON.parseObject(result);
         boolean success = joRet.getBoolean("success");
         if (!success) {
@@ -228,7 +246,9 @@ public class TransactionService extends BaseService<TransactionPo>  {
     private void execTransactionDetailCancel(TransactionDetailPo transactionDetailPo) {
         String url = transactionDetailPo.getTxUrlCancel();
         String params = transactionDetailPo.getParamsCancel();
-        String result = execHttpCall(url, params);
+        JSONObject joParams = JSON.parseObject(params);
+        joParams.put("txId", transactionDetailPo.getTxId());
+        String result = execHttpCall(url, joParams.toString());
         JSONObject joRet = JSON.parseObject(result);
         boolean success = joRet.getBoolean("success");
         if (!success) {

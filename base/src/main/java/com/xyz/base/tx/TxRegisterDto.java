@@ -67,7 +67,12 @@ public class TxRegisterDto {
         this.txStatus = txStatus;
     }
 
-    public class TxRegisterDto_CalleeDto {
+    public static class TxRegisterDto_CalleeDto {
+
+        public TxRegisterDto_CalleeDto() {
+
+        }
+
         private String txUrlTry; // 被调用者的doTry地址
 
         private String paramsTry; // 被调用者的地址对应的参数，JSON格式

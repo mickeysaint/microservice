@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -19,12 +20,13 @@ public class TxController {
     @Autowired
     private TransactionService transactionService;
 
-    @RequestMapping("/register")
+    @RequestMapping(value = "/register", method = {RequestMethod.POST})
     public ResultBean<TxRegisterReturnDto> register(@RequestBody TxRegisterDto dto) {
         ResultBean<TxRegisterReturnDto> ret = new ResultBean<>();
 
         try {
-            transactionService.register(dto);
+            TxRegisterReturnDto txRegisterReturnDto = transactionService.register(dto);
+            transactionService.execTransaction(txRegisterReturnDto.getTxId());
         } catch(Exception e) {
             ret.setSuccess(false);
             ret.setMessage(e.getMessage());
