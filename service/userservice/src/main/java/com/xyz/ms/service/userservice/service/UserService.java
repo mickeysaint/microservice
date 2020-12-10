@@ -13,6 +13,7 @@ import com.xyz.base.po.user.UserPo;
 import com.xyz.base.service.BaseDao;
 import com.xyz.base.service.BaseService;
 import com.xyz.base.util.StringUtil;
+import com.xyz.base.util.TokenUtils;
 import com.xyz.base.vo.user.UserVo;
 import com.xyz.ms.service.userservice.client.Oauth2ClientService;
 import com.xyz.ms.service.userservice.dao.MenuDao;
@@ -86,7 +87,7 @@ public class UserService extends BaseService<UserPo> {
 
     public UserPo getCurrentUser(HttpServletRequest request) {
         UserPo ret = null;
-        String accessToken = request.getHeader("accessToken");
+        String accessToken = TokenUtils.getToken(request);
         if (!StringUtils.isEmpty(accessToken)) {
             ResultBean<UserPo> resultBean = oauth2ClientService.getUserByToken(accessToken);
             ret = resultBean.getData();
